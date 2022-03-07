@@ -1,0 +1,23 @@
+GET http://localhost:3000/users/6226394efbf681f1314a1
+
+###
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+  "name": "Тестовый пользователь",
+  "about": "О себе",
+  "avatar": "https://images.unsplash.com/photo-1646255911174-3172baff41e2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDN8QkpKTXR0ZURKQTR8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60"
+}
+
+###
+GET http://localhost:3000/cards
+
+###
+POST http://localhost:3000/cards
+Content-Type: application/json
+
+{
+  "name": "Тестовая карточка",
+  "link": "https://images.unsplash.com/photo-1646289224338-0950c4ad9d9d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDR8aVVJc25WdGpCMFl8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60"
+}
