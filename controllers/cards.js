@@ -48,7 +48,6 @@ module.exports.likeCard = (req, res) => {
     })
     .then((card) => res.send({ data: card }))
     .catch((err) => {
-      console.dir(err);
       if (err.name === 'CastError') {
         return res.status(400).send({ message: 'Неверный _id карточки' });
       }
