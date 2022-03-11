@@ -1,0 +1,49 @@
+GET http://localhost:3000/users/62262f7b4e2bc6b474f54
+
+###
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+  "name": "Тестовый пользовательQ",
+  "about": "О ct,r",
+  "avatar": "https://images.unsplash.com/photo-1646255911174-3172baff41e2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDN8QkpKTXR0ZURKQTR8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60"
+}
+
+###
+GET http://localhost:3000/cards
+
+###
+POST http://localhost:3000/cards
+Content-Type: application/json
+
+{
+  "name": "Тестовая карточка000",
+  "link": "https://images.unsplash.com/photo-1646289224338-0950c4ad9d9d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDR8aVVJc25WdGpCMFl8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60"
+}
+
+###
+DELETE http://localhost:3000/cards/62290d15ae6745df4fe25ef7
+
+###
+PATCH http://localhost:3000/users/me
+Content-Type: application/json
+
+{
+  "name": "Kate",
+  "about": "about"
+}
+
+###
+PATCH http://localhost:3000/users/me/avatar
+Content-Type: application/json
+
+{
+  "avatar": "some url"
+}
+
+###
+PUT http://localhost:3000/cards/6229070b4da9fbc12d5800b4/likes
+
+###
+DELETE http://localhost:3000/cards/6229070b4da9fbc12d5800b4/likes
