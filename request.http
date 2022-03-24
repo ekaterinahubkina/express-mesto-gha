@@ -23,7 +23,7 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:3000/cards/
+DELETE http://localhost:3000/cards/6238e1c855ff5bdd661f5655
 
 ###
 PATCH http://localhost:3000/users/me

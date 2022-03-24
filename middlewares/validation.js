@@ -24,6 +24,25 @@ const register = celebrate({
   }),
 });
 
+const card = celebrate({
+  [Segments.BODY]: Joi.object().keys({
+    name: Joi.string().required().min(2).max(30)
+      .messages({
+        'any.required': 'Укажите название карточки места',
+        'string.min': 'Название должно быть болше 2-х символов',
+      }),
+    link: Joi.string().required().custom((value, helper) => {
+      if (!validator.isURL(value)) {
+        return helper.error('string.notUrl');
+      }
+      return value;
+    }).messages({
+      'any.required': 'Укажите Url',
+      'string.notUrl': 'Некорректный Url',
+    }),
+  }),
+});
+
 module.exports = {
-  register,
+  register, card,
 };

@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 
 mongoose.connect('mongodb://localhost:27017/mestodb');
 
-app.post('/signin', login);
+app.post('/signin', register, login);
 app.post('/signup', register, createUser);
 
 app.use(auth);
