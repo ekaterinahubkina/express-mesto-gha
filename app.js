@@ -1,20 +1,24 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const { login, createUser } = require('./controllers/users');
+const auth = require('./middlewares/auth');
+const errorHandler = require('./middlewares/errorHandler');
+const { register } = require('./middlewares/validation');
 
 const { PORT = 3000 } = process.env;
 
 const app = express();
 app.use(express.json());
 
+app.use(bodyParser.json());
+
 mongoose.connect('mongodb://localhost:27017/mestodb');
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: '62263b98fbf5b1681f1314a7',
-  };
+app.post('/signin', register, login);
+app.post('/signup', register, createUser);
 
-  next();
-});
+app.use(auth);
 
 app.use('/users', require('./routes/users'));
 app.use('/cards', require('./routes/cards'));
@@ -24,6 +28,8 @@ app.use((req, res, next) => {
 
   next();
 });
+
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   // Если всё работает, консоль покажет, какой порт приложение слушает

@@ -1,13 +1,13 @@
-GET http://localhost:3000/users/62262f7b4e2bc6b474f54
+GET http://localhost:3000/users/62306b3cc773f2c9cfa2dd59
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjMwNmIzY2M3NzNmMmM5Y2ZhMmRkNTkiLCJpYXQiOjE2NDczNDMyNjQsImV4cCI6MTY0Nzk0ODA2NH0.qJ9rybEcqiVtouUBK_U8KCDCj6aAU0tgQ0c-ppMMaLo
 
 ###
-POST http://localhost:3000/users
+POST http://localhost:3000/signin
 Content-Type: application/json
 
 {
-  "name": "Тестовый пользовательQ",
-  "about": "О ct,r",
-  "avatar": "https://images.unsplash.com/photo-1646255911174-3172baff41e2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDN8QkpKTXR0ZURKQTR8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60"
+  "email": "testuser@mail.ru",
+  "password": "098765"
 }
 
 ###
@@ -18,12 +18,12 @@ POST http://localhost:3000/cards
 Content-Type: application/json
 
 {
-  "name": "Тестовая карточка000",
+  "name": "карточка тест",
   "link": "https://images.unsplash.com/photo-1646289224338-0950c4ad9d9d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDR8aVVJc25WdGpCMFl8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60"
 }
 
 ###
-DELETE http://localhost:3000/cards/62290d15ae6745df4fe25ef7
+DELETE http://localhost:3000/cards/6238e1c855ff5bdd661f5655
 
 ###
 PATCH http://localhost:3000/users/me
@@ -35,6 +35,10 @@ Content-Type: application/json
 }
 
 ###
+GET http://localhost:3000/users/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjMwNmIzY2M3NzNmMmM5Y2ZhMmRkNTkiLCJpYXQiOjE2NDczNDMyNjQsImV4cCI6MTY0Nzk0ODA2NH0.qJ9rybEcqiVtouUBK_U8KCDCj6aAU0tgQ0c-ppMMaLo
+
+###
 PATCH http://localhost:3000/users/me/avatar
 Content-Type: application/json
 
@@ -43,7 +47,7 @@ Content-Type: application/json
 }
 
 ###
-PUT http://localhost:3000/cards/6229070b4da9fbc12d5800b4/likes
+PUT http://localhost:3000/cards/67dabe91ccce6dq/likes
 
 ###
-DELETE http://localhost:3000/cards/6229070b4da9fbc12d5800b4/likes
+DELETE http://localhost:3000/cards/6229070b4дл9fbc12d5800b4/likes
