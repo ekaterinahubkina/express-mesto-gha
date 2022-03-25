@@ -24,10 +24,6 @@ module.exports.createCard = (req, res, next) => {
     .then((card) => res.send({ data: card }))
     .catch((err) => {
       next(err);
-      // if (err.name === 'ValidationError') {
-      //   return res.status(400).send({ message: 'Переданы некорректные данные' });
-      // }
-      // return res.status(500).send({ message: err.message });
     });
 };
 
@@ -37,7 +33,6 @@ module.exports.deleteCard = (req, res, next) => {
       throw new ErrorNotFound('Карточка не найдена');
     })
     .then((card) => {
-      console.log(card.owner.toString(), req.user._id);
       if (card.owner.toString() !== req.user._id) {
         throw new ErrorForbidden('Нет прав доступа');
       }
@@ -45,14 +40,10 @@ module.exports.deleteCard = (req, res, next) => {
       res.send({ data: card });
     })
     .catch((err) => {
+      if (err.name === 'CastError') {
+        throw new ErrorValidation('Неверный _id карточки');
+      }
       next(err);
-      // if (err.name === 'CastError') {
-      //   return res.status(400).send({ message: 'Неверный _id карточки' });
-      // }
-      // if (err.statusCode === 404) {
-      //   return res.status(404).send({ message: err.errorMessage });
-      // }
-      // return res.status(500).send({ message: err.message });
     });
 };
 
@@ -63,14 +54,10 @@ module.exports.likeCard = (req, res, next) => {
     })
     .then((card) => res.send({ data: card }))
     .catch((err) => {
+      if (err.name === 'CastError') {
+        throw new ErrorValidation('Неверный _id карточки');
+      }
       next(err);
-      // if (err.name === 'CastError') {
-      //   return res.status(400).send({ message: 'Неверный _id карточки' });
-      // }
-      // if (err.statusCode === 404) {
-      //   return res.status(404).send({ message: err.errorMessage });
-      // }
-      // return res.status(500).send({ message: err.message });
     });
 };
 
@@ -82,12 +69,8 @@ module.exports.dislikeCard = (req, res, next) => {
     .then((card) => res.send({ data: card }))
     .catch((err) => {
       if (err.name === 'CastError') {
-        return res.status(400).send({ message: 'Неверный _id карточки' });
+        throw new ErrorValidation('Неверный _id карточки');
       }
-      return next(err);
-      // if (err.statusCode === 404) {
-      //   return res.status(404).send({ message: err.errorMessage });
-      // }
-      // return res.status(500).send({ message: err.message });
+      next(err);
     });
 };

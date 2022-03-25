@@ -4,6 +4,7 @@ const User = require('../models/user');
 const ErrorNotFound = require('../errors/ErrorNotFound');
 const ErrorConflict = require('../errors/ErrorConflict');
 const ErrorValidation = require('../errors/ErrorValidation');
+const ErrorUnauthorized = require('../errors/ErrorUnauthorized');
 
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
@@ -15,20 +16,24 @@ module.exports.login = (req, res, next) => {
     .catch((err) => next(err));
 };
 
-module.exports.getUsers = (req, res) => {
+module.exports.getUsers = (req, res, next) => {
   User.find({})
     .then((users) => res.send({ data: users }))
-    .catch((err) => res.status(500).send({ message: err.message }));
+    .catch((err) => next(err));
 };
 
-module.exports.getCurrentUser = (req, res) => {
-  console.log('код дошел до сюда');
+module.exports.getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
-    .then((user) => res.send({ data: user }))
-    .catch((err) => res.status(401).send({ message: err.message }));
+    .then((user) => {
+      if (!user) {
+        throw new ErrorUnauthorized('Необходимj авторизироваться');
+      }
+      res.send({ data: user });
+    })
+    .catch((err) => next(err));
 };
 
-module.exports.getUserById = (req, res) => {
+module.exports.getUserById = (req, res, next) => {
   User.findById(req.params.id)
     .orFail(() => {
       throw new ErrorNotFound('Пользователь не найден');
@@ -36,23 +41,11 @@ module.exports.getUserById = (req, res) => {
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'CastError') {
-        return res.status(400).send({ message: 'Неверный _id' });
+        throw new ErrorValidation('Неверный _id');
       }
-      if (err.statusCode === 404) {
-        return res.status(404).send({ message: err.errorMessage });
-      }
-      return res.status(500).send({ message: err.message });
+      next(err);
     });
 };
-
-// const ValidationCredentials = (req, res, next) => {
-//   const { email, password } = req.body;
-
-//   if (!email || !password) {
-//     return next(new ErrorValidation('Неправильный email или пароль'));
-//   }
-//   next();
-// };
 
 module.exports.createUser = (req, res, next) => {
   const {
@@ -77,48 +70,33 @@ module.exports.createUser = (req, res, next) => {
     .then((user) => res.send({ user }))
     .catch((err) => {
       next(err);
-      // if (err.name === 'ValidationError') {
-      //   return res.status(400).send({ message: 'Переданы некорректные данные' });
-      // }
-      // if (err.statusCode === 409) {
-      //   return res.status(err.statusCode).send({ message: err.message, error: err });
-      // }
-      // return res.status(500).send({ message: err.message });
     });
 };
 
-module.exports.updateUserInfo = (req, res) => {
+module.exports.updateUserInfo = (req, res, next) => {
   const { name, about } = req.body;
+  if (!name || !about) {
+    throw new ErrorValidation('Некорректные данные');
+  }
   User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
     .orFail(() => {
       throw new ErrorNotFound('Пользователь c таким id не найден');
     })
     .then((user) => res.send({ data: user }))
-    .catch((err) => {
-      if (err.statusCode === 404) {
-        return res.status(404).send({ message: err.errorMessage });
-      }
-      if (err.name === 'ValidationError') {
-        return res.status(400).send({ message: 'Переданы некорректные данные' });
-      }
-      return res.status(500).send({ message: err.message });
-    });
+    .catch((err) => next(err));
 };
 
-module.exports.updateUserAvatar = (req, res) => {
+module.exports.updateUserAvatar = (req, res, next) => {
   const { avatar } = req.body;
+  if (!avatar) {
+    throw new ErrorValidation('Некорректные данные');
+  }
   User.findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
     .orFail(() => {
       throw new ErrorNotFound('Пользователь c таким id не найден');
     })
     .then((user) => res.send({ data: user }))
     .catch((err) => {
-      if (err.statusCode === 404) {
-        return res.status(404).send({ message: err.errorMessage });
-      }
-      if (err.name === 'ValidationError') {
-        return res.status(400).send({ message: 'Переданы некорректные данные' });
-      }
-      return res.status(500).send({ message: err.message });
+      next(err);
     });
 };

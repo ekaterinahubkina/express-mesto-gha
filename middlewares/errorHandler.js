@@ -8,10 +8,12 @@ const errorHandler = (err, req, res, next) => {
     const [error] = err.details.values();
     return res.status(400).send({ message: error.message });
   }
+  if (status === 500) {
+    return res.status(500).send({ message: 'На сервере произошла ошибка' });
+  }
 
   res.status(status).send({
     message: err.message,
-    err,
   });
   return next();
 };

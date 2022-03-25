@@ -7,7 +7,10 @@ const register = celebrate({
   [Segments.BODY]: Joi.object().keys({
     name: Joi.string().min(2).max(30).default('Жак-Ив Кусто'),
     about: Joi.string().min(2).max(30).default('Исследователь'),
-    avatar: Joi.string().default('https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png'),
+    avatar: Joi.string().default('https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png')
+      .regex(/^https?:\/\/w*\.?[a-z0-9]\D*#?$/).messages({
+        'string.pattern.base': 'Некорректный Url',
+      }),
     email: Joi.string().required().custom((value, helper) => {
       if (!validator.isEmail(value)) {
         return helper.error('string.notEmail');
@@ -31,14 +34,9 @@ const card = celebrate({
         'any.required': 'Укажите название карточки места',
         'string.min': 'Название должно быть болше 2-х символов',
       }),
-    link: Joi.string().required().custom((value, helper) => {
-      if (!validator.isURL(value)) {
-        return helper.error('string.notUrl');
-      }
-      return value;
-    }).messages({
+    link: Joi.string().required().regex(/^https?:\/\/w*\.?[a-z0-9]\D*#?$/).messages({
       'any.required': 'Укажите Url',
-      'string.notUrl': 'Некорректный Url',
+      'string.pattern.base': 'Некорректный Url',
     }),
   }),
 });
