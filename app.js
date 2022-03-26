@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const { errors } = require('celebrate');
 const { login, createUser } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const errorHandler = require('./middlewares/errorHandler');
@@ -27,6 +28,8 @@ app.use('/cards', require('./routes/cards'));
 app.use((req, res, next) => {
   next(new ErrorNotFound('Неправильный путь'));
 });
+
+app.use(errors());
 
 app.use(errorHandler);
 
