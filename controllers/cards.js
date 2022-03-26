@@ -23,7 +23,11 @@ module.exports.createCard = (req, res, next) => {
   })
     .then((card) => res.send({ data: card }))
     .catch((err) => {
-      next(err);
+      if (err.name === 'ValidationError') {
+        next(new ErrorValidation('Некорректные данные'));
+      } else {
+        next(err);
+      }
     });
 };
 
@@ -41,9 +45,10 @@ module.exports.deleteCard = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new ErrorValidation('Неверный _id карточки');
+        next(new ErrorValidation('Неверный _id карточки'));
+      } else {
+        next(err);
       }
-      next(err);
     });
 };
 
@@ -55,9 +60,10 @@ module.exports.likeCard = (req, res, next) => {
     .then((card) => res.send({ data: card }))
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new ErrorValidation('Неверный _id карточки');
+        next(new ErrorValidation('Неверный _id карточки'));
+      } else {
+        next(err);
       }
-      next(err);
     });
 };
 
@@ -69,8 +75,9 @@ module.exports.dislikeCard = (req, res, next) => {
     .then((card) => res.send({ data: card }))
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new ErrorValidation('Неверный _id карточки');
+        next(new ErrorValidation('Неверный _id карточки'));
+      } else {
+        next(err);
       }
-      next(err);
     });
 };

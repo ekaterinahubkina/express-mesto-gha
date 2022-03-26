@@ -28,6 +28,7 @@ DELETE http://localhost:3000/cards/6238e1c855ff5bdd661f5655
 ###
 PATCH http://localhost:3000/users/me
 Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjNmMDJjNzRlODU4ZTdhZGE2YjEyNDkiLCJpYXQiOjE2NDgyOTY2NTgsImV4cCI6MTY0ODkwMTQ1OH0.Zy40Cw1mP-4UvHOZlwNiTFzQpal61p8s3LEeQSr7i-4
 
 {
   "name": "Kate",

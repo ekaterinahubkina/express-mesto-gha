@@ -4,7 +4,6 @@ const User = require('../models/user');
 const ErrorNotFound = require('../errors/ErrorNotFound');
 const ErrorConflict = require('../errors/ErrorConflict');
 const ErrorValidation = require('../errors/ErrorValidation');
-const ErrorUnauthorized = require('../errors/ErrorUnauthorized');
 
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
@@ -26,7 +25,7 @@ module.exports.getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
-        throw new ErrorUnauthorized('Необходимj авторизироваться');
+        throw new ErrorNotFound('Пользователь не найден');
       }
       res.send({ data: user });
     })
@@ -41,9 +40,10 @@ module.exports.getUserById = (req, res, next) => {
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new ErrorValidation('Неверный _id');
+        next(new ErrorValidation('Неверный _id'));
+      } else {
+        next(err);
       }
-      next(err);
     });
 };
 
@@ -69,7 +69,11 @@ module.exports.createUser = (req, res, next) => {
     .then((user) => User.findOne({ _id: user._id }))
     .then((user) => res.send({ user }))
     .catch((err) => {
-      next(err);
+      if (err.name === 'ValidationError') {
+        next(new ErrorValidation('Некорректные данные'));
+      } else {
+        next(err);
+      }
     });
 };
 
@@ -83,7 +87,13 @@ module.exports.updateUserInfo = (req, res, next) => {
       throw new ErrorNotFound('Пользователь c таким id не найден');
     })
     .then((user) => res.send({ data: user }))
-    .catch((err) => next(err));
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new ErrorValidation('Некорректные данные'));
+      } else {
+        next(err);
+      }
+    });
 };
 
 module.exports.updateUserAvatar = (req, res, next) => {
@@ -97,6 +107,10 @@ module.exports.updateUserAvatar = (req, res, next) => {
     })
     .then((user) => res.send({ data: user }))
     .catch((err) => {
-      next(err);
+      if (err.name === 'ValidationError') {
+        next(new ErrorValidation('Некорректные данные'));
+      } else {
+        next(err);
+      }
     });
 };
